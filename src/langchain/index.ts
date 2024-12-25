@@ -66,7 +66,7 @@ export class SolanaTransferTool extends Tool {
       const tx = await this.solanaKit.transfer(
         recipient,
         parsedInput.amount,
-        mintAddress,
+        mintAddress
       );
 
       return JSON.stringify({
@@ -111,7 +111,7 @@ export class SolanaDeployTokenTool extends Tool {
         parsedInput.uri,
         parsedInput.symbol,
         parsedInput.decimals,
-        parsedInput.initialSupply,
+        parsedInput.initialSupply
       );
 
       return JSON.stringify({
@@ -191,7 +191,7 @@ export class SolanaMintNFTTool extends Tool {
         },
         parsedInput.recipient
           ? new PublicKey(parsedInput.recipient)
-          : this.solanaKit.wallet_address,
+          : this.solanaKit.wallet_address
       );
 
       return JSON.stringify({
@@ -239,7 +239,7 @@ export class SolanaTradeTool extends Tool {
         parsedInput.inputMint
           ? new PublicKey(parsedInput.inputMint)
           : new PublicKey("So11111111111111111111111111111111111111112"),
-        parsedInput.slippageBps,
+        parsedInput.slippageBps
       );
 
       return JSON.stringify({
@@ -319,7 +319,7 @@ export class SolanaRegisterDomainTool extends Tool {
 
       const tx = await this.solanaKit.registerDomain(
         parsedInput.name,
-        parsedInput.spaceKB || 1,
+        parsedInput.spaceKB || 1
       );
 
       return JSON.stringify({
@@ -476,7 +476,7 @@ export class SolanaPumpfunTokenLaunchTool extends Tool {
           telegram: parsedInput.telegram,
           website: parsedInput.website,
           initialLiquiditySOL: parsedInput.initialLiquiditySOL,
-        },
+        }
       );
 
       return JSON.stringify({
@@ -732,7 +732,7 @@ export class SolanaCompressedAirdropTool extends Tool {
         parsedInput.decimals,
         parsedInput.recipients,
         parsedInput.priorityFeeInLamports || 30_000,
-        parsedInput.shouldLog || false,
+        parsedInput.shouldLog || false
       );
 
       return JSON.stringify({
@@ -942,6 +942,156 @@ export class SolanaRaydiumCreateCpmm extends Tool {
   }
 }
 
+export class SolanaRaydiumAddLiquidityAmm extends Tool {
+  name = "raydium_add_liquidity_amm";
+  description = `Raydium add liquidity to amm pool
+
+  Inputs (input is a json string):
+  poolId: string (required)
+  inputAmount: string (required)
+  `;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  async _call(input: string): Promise<string> {
+    try {
+      let inputFormat = JSON.parse(input);
+
+      const tx = await this.solanaKit.raydiumAddLiquidityAmm(
+        inputFormat.poolId,
+        new Decimal(inputFormat.inputAmount)
+      );
+
+      return JSON.stringify({
+        status: "success",
+        message: "Add liquidity to amm pool successfully",
+        transaction: tx,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
+export class SolanaRaydiumRemoveLiquidityAmm extends Tool {
+  name = "raydium_remove_liquidity_amm";
+  description = `Raydium remove liquidity from amm pool
+
+  Inputs (input is a json string):
+  poolId: string (required)
+  withdrawLpAmount: string (required)
+  `;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  async _call(input: string): Promise<string> {
+    try {
+      let inputFormat = JSON.parse(input);
+
+      const tx = await this.solanaKit.raydiumRemoveLiquidityAmm(
+        inputFormat.poolId,
+        new BN(inputFormat.withdrawLpAmount)
+      );
+
+      return JSON.stringify({
+        status: "success",
+        message: "Remove liquidity from amm pool successfully",
+        transaction: tx,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
+export class SolanaRaydiumOpenPositionClmm extends Tool {
+  name = "raydium_open_position_clmm";
+  description = `Raydium open position in clmm pool
+
+  Inputs (input is a json string):
+  poolId: string (required)
+  inputAmount: string (required)
+  startPrice: string (required)
+  endPrice: string (required)
+  `;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  async _call(input: string): Promise<string> {
+    try {
+      let inputFormat = JSON.parse(input);
+
+      const tx = await this.solanaKit.raydiumOpenPositionClmm(
+        inputFormat.poolId,
+        new Decimal(inputFormat.inputAmount),
+        new Decimal(inputFormat.startPrice),
+        new Decimal(inputFormat.endPrice)
+      );
+
+      return JSON.stringify({
+        status: "success",
+        message: "Open position in clmm pool successfully",
+        transaction: tx,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
+export class SolanaRaydiumClosePositionClmm extends Tool {
+  name = "raydium_close_position_clmm";
+  description = `Raydium close position in clmm pool
+
+  Inputs (input is a json string):
+  poolId: string (required)
+  `;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  async _call(input: string): Promise<string> {
+    try {
+      let inputFormat = JSON.parse(input);
+
+      const tx = await this.solanaKit.raydiumClosePositionClmm(
+        inputFormat.poolId
+      );
+
+      return JSON.stringify({
+        status: "success",
+        message: "Close position in clmm pool successfully",
+        transaction: tx,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
 export class SolanaOpenbookCreateMarket extends Tool {
   name = "solana_openbook_create_market";
   description = `Openbook marketId, required for ammv4
@@ -1033,7 +1183,7 @@ export class SolanaResolveAllDomainsTool extends Tool {
     try {
       const owner = await this.solanaKit.resolveAllDomains(input);
 
-      if(!owner) {
+      if (!owner) {
         return JSON.stringify({
           status: "error",
           message: "Domain not found",
@@ -1055,7 +1205,6 @@ export class SolanaResolveAllDomainsTool extends Tool {
     }
   }
 }
-
 
 export class SolanaGetOwnedDomains extends Tool {
   name = "solana_get_owned_domains";
@@ -1088,7 +1237,6 @@ export class SolanaGetOwnedDomains extends Tool {
   }
 }
 
-
 export class SolanaGetOwnedTldDomains extends Tool {
   name = "solana_get_owned_tld_domains";
   description = `Get all domains owned by the agent's wallet for a specific TLD.
@@ -1119,7 +1267,6 @@ export class SolanaGetOwnedTldDomains extends Tool {
   }
 }
 
-
 export class SolanaGetAllTlds extends Tool {
   name = "solana_get_all_tlds";
   description = `Get all active top-level domains (TLDs) in the AllDomains Name Service`;
@@ -1146,7 +1293,6 @@ export class SolanaGetAllTlds extends Tool {
     }
   }
 }
-
 
 export class SolanaGetMainDomain extends Tool {
   name = "solana_get_main_domain";
@@ -1205,6 +1351,10 @@ export function createSolanaTools(solanaKit: SolanaAgentKit) {
     new SolanaRaydiumCreateAmmV4(solanaKit),
     new SolanaRaydiumCreateClmm(solanaKit),
     new SolanaRaydiumCreateCpmm(solanaKit),
+    new SolanaRaydiumAddLiquidityAmm(solanaKit),
+    new SolanaRaydiumRemoveLiquidityAmm(solanaKit),
+    new SolanaRaydiumOpenPositionClmm(solanaKit),
+    new SolanaRaydiumClosePositionClmm(solanaKit),
     new SolanaOpenbookCreateMarket(solanaKit),
     new SolanaCreateSingleSidedWhirlpoolTool(solanaKit),
     new SolanaPythFetchPrice(solanaKit),

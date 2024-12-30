@@ -46,3 +46,9 @@ export * from "./create_gibwork_task";
 
 export * from "./rock_paper_scissor";
 export * from "./create_tiplinks";
+ 
+export * from "./create_multisig_squads";
+export * from "./get_multisig_vault_address";
+export * from "./create_multisig_transaction";
+export * from "./vote_multisig_transaction";
+export * from "./excute_multisig_transaction";

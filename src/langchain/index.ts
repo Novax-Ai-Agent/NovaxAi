@@ -1590,6 +1590,204 @@ export class SolanaTipLinkTool extends Tool {
   }
 }
 
+ 
+export class CreateMultisigAccount extends Tool {
+  name = "create_multisig_account";
+  description = `Create a new multisig wallet 
+
+  Inputs ( input is a JSON string ):
+  members: { address: string; permissions: ("Vote" | "Initiate" | "Execute")[] }[], eg [{ address: "DoQ47WTYzvgCNXwVK1Uf3urpXqa8maE7hJFd1xNLYUp2", permissions: ["Vote", "Execute"] }] (required)
+  threshold: number, eg 2 (required)
+`;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      const parsedInput = JSON.parse(input);
+
+      const members = parsedInput.members;
+      const threshold = parsedInput.threshold;
+      const res = await this.solanaKit.createMultsigAccount(members, threshold);
+
+      return JSON.stringify({
+        status: "success",
+        message: "Multisig created successfully",
+        signature: res.signature,
+        multisigPda: res.multisigPda.toString(),
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
+export class getMultisigVaultAddress extends Tool {
+  name = "get_multisig_vault_address";
+  description = `Get the vault address of a multisig PDA
+
+  Inputs ( input is a JSON string ):
+  multisigPda: PublicKey, eg "DoQ47WTYzvgCNXwVK1Uf3urpXqa8maE7hJFd1xNLYUp2" (required), 
+  vaultIndex: number eg 0 (required)
+`;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      const parsedInput = JSON.parse(input);
+
+      const address = await this.solanaKit.getMultisigVaultAddress(
+        new PublicKey(parsedInput.multisigPda),
+        parsedInput.vaultIndex,
+      );
+
+      return JSON.stringify({
+        status: "success",
+        message: "Multisig vault address fetched successfully",
+        address,
+        vaultIndex: parsedInput.vaultIndex,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
+export class CreateMultsigTransaction extends Tool {
+  name = "create_multisig_transaction";
+  description = `Create a new transaction in a multisig wallet
+
+  Inputs ( input is a JSON string ):
+  multisigPda: PublicKey, eg "DoQ47WTYzvgCNXwVK1Uf3urpXqa8maE7hJFd1xNLYUp2" (required), 
+  vaultIndex: number eg 0 (required),
+  to: string, eg "8x2dR8Mpzuz2YqyZyZjUbYWKSWesBo5jMx2Q9Y86udVk" (required)
+  amount: number, eg 1 (required)
+  mint?: string, eg "So11111111111111111111111111111111111111112" or "SENDdRQtYMWaQrBroBrJ2Q53fgVuq95CV9UPGEvpCxa" (optional)
+  memo?: string, eg "Transfer 1 SOL" (optional)
+`;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      const parsedInput = JSON.parse(input);
+
+      const mintAddress = parsedInput.mint
+        ? new PublicKey(parsedInput.mint)
+        : undefined;
+
+      const transactionIndex = await this.solanaKit.createMultsigTransaction(
+        new PublicKey(parsedInput.multisigPda),
+        parsedInput.vaultIndex,
+        new PublicKey(parsedInput.to),
+        parsedInput.amount,
+        mintAddress,
+        parsedInput.memo,
+      );
+
+      return JSON.stringify({
+        status: "success",
+        message: "Transaction created successfully",
+        transactionIndex: Number(transactionIndex),
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
+export class VoteMultisigTransaction extends Tool {
+  name = "vote_multisig_transaction";
+  description = `Vote on a multisig transaction
+
+  Inputs ( input is a JSON string ):
+  multisigPda: PublicKey, eg "DoQ47WTYzvgCNXwVK1Uf3urpXqa8maE7hJFd1xNLYUp2" (required), 
+  transactionIndex: number eg 0 (required),
+  approve: boolean, eg true (required) 
+`;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      const parsedInput = JSON.parse(input);
+
+      const signature = await this.solanaKit.voteMultisigTransaction(
+        new PublicKey(parsedInput.multisigPda),
+        parsedInput.transactionIndex,
+        parsedInput.approve,
+      );
+
+      return JSON.stringify({
+        status: "success",
+        message: "Voted successfully",
+        signature,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+      });
+    }
+  }
+}
+
+export class ExcuteMultisigTransaction extends Tool {
+  name = "execute_multisig_transaction";
+  description = `Excute a multisig transaction
+  
+  Inputs ( input is a JSON string ):
+  multisigPda: PublicKey, eg "DoQ47WTYzvgCNXwVK1Uf3urpXqa8maE7hJFd1xNLYUp2" (required),
+  transactionIndex: number eg 0 (required)
+  `;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      const parsedInput = JSON.parse(input);
+
+      const signature = await this.solanaKit.excuteMultisigTransaction(
+        new PublicKey(parsedInput.multisigPda),
+        parsedInput.transactionIndex,
+      );
+      
+      return JSON.stringify({
+        status: "success",
+        message: "Transaction executed successfully",
+        signature,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
 export function createSolanaTools(solanaKit: SolanaAgentKit) {
   return [
     new SolanaBalanceTool(solanaKit),
@@ -1632,5 +1830,10 @@ export function createSolanaTools(solanaKit: SolanaAgentKit) {
     new SolanaCreateGibworkTask(solanaKit),
     new SolanaRockPaperScissorsTool(solanaKit),
     new SolanaTipLinkTool(solanaKit),
+    new CreateMultisigAccount(solanaKit),
+    new getMultisigVaultAddress(solanaKit),
+    new CreateMultsigTransaction(solanaKit),
+    new VoteMultisigTransaction(solanaKit),
+    new ExcuteMultisigTransaction(solanaKit)
   ];
 }

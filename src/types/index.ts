@@ -1,5 +1,11 @@
 import { PublicKey } from "@solana/web3.js";
 
+export interface CreateMultisigMember {
+  address: PublicKey[];
+  permissions: ("Vote" | "Initiate" | "Execute")[];
+  threshold: number;
+}
+
 export interface Creator {
   address: string;
   percentage: number;

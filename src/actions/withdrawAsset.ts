@@ -1,19 +1,15 @@
 import { Action } from "../types/action";
 import { SolanaAgentKit } from "../agent";
 import { z } from "zod";
-import { lendAsset } from "../tools";
+import { withdrawAsset } from "../tools";
 
-const lendAssetAction: Action = {
-  name: "LEND_ASSET",
+const withdrawAssetAction: Action = {
+  name: "WITHDRAW_ASSET",
   similes: [
-    "lend usdc",
-    "deposit for yield",
-    "earn yield",
-    "lend with lulo",
-    "deposit usdc",
-    "lending",
+    "withdraw usdc",
+    "withdraw with lulo",
   ],
-  description: "Lend SPL tokens to earn yield using Lulo protocol",
+  description: "Withdraw SPL tokens using Lulo protocol",
   examples: [
     [
       {
@@ -24,9 +20,9 @@ const lendAssetAction: Action = {
         output: {
           status: "success",
           signature: "4xKpN2...",
-          message: "Successfully lent 100 USDC",
+          message: "Successfully withdraw 100 USDC",
         },
-        explanation: "Lend 100 USDC to earn yield on Lulo",
+        explanation: "Withdraw 100 USDC on Lulo",
       },
     ],
   ],
@@ -39,20 +35,20 @@ const lendAssetAction: Action = {
       const mintAddress = input.mintAddress as string;
       const amount = input.amount as number;
 
-      const response = await lendAsset(agent, mintAddress, amount);
+      const response = await withdrawAsset(agent, mintAddress, amount);
 
       return {
         status: "success",
         signature: response,
-        message: `Successfully lent ${amount} of token ${mintAddress}`,
+        message: `Successfully withdraw ${amount} of token ${mintAddress}`,
       };
     } catch (error: any) {
       return {
         status: "error",
-        message: `Lending failed: ${error.message}`,
+        message: `Withdraw failed: ${error.message}`,
       };
     }
   },
 };
 
-export default lendAssetAction;
+export default withdrawAssetAction;

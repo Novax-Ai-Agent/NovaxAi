@@ -46,4 +46,5 @@ export * from "./stake_with_solayer";
 export * from "./tensor_trade";
 export * from "./trade";
 export * from "./transfer";
+export * from "./withdraw";
 export * from "./withdraw_all";

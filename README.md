@@ -57,7 +57,7 @@ Anyone - whether an SF-based AI researcher or a crypto-native builder - can brin
   - Perpetuals Trading with Adrena Protocol
 
 - **Solana Blinks**
-   - Lending by Lulo (Best APR for USDC)
+   - Lending by Lulo (Best APR for USDC and other assets)
    - Send Arcade Games
    - JupSOL staking
    - Solayer SOL (sSOL)staking
@@ -296,7 +296,7 @@ Refer to [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to co
 
 Apache-2 License
 
-## Funding 
+## Funding
 
 If you wanna give back any tokens or donations to the OSS community -- The Public Solana Agent Kit Treasury Address:
 

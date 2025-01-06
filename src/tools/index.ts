@@ -43,5 +43,8 @@ export * from "./stake_with_solayer";
 export * from "./tensor_trade";
 export * from "./trade";
 export * from "./transfer";
+export * from "./withdraw_all";
+export * from "./create_pool_fluxbeam";
+export * from "./swap_fluxbeam";
 export * from "./flash_open_trade";
 export * from "./flash_close_trade";

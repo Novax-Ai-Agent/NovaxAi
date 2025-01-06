@@ -888,9 +888,10 @@ export class SolanaCreateImageTool extends Tool {
 
 export class SolanaLendAssetTool extends Tool {
   name = "solana_lend_asset";
-  description = `Lend idle USDC for yield using Lulo. ( only USDC is supported )
+  description = `Lend token for yield using Lulo. (support USDC/PYUSD/USDS/USDT/SOL/jitoSOL/bSOL/mSOL/BONK/JUP)
 
-  Inputs (input is a json string):
+  Inputs:
+  mintAddress: string, eg "So11111111111111111111111111111111111111112" (required)
   amount: number, eg 1, 0.01 (required)`;
 
   constructor(private solanaKit: SolanaAgentKit) {
@@ -899,13 +900,51 @@ export class SolanaLendAssetTool extends Tool {
 
   async _call(input: string): Promise<string> {
     try {
-      const amount = JSON.parse(input).amount || input;
+      const parsedInput = JSON.parse(input);
+      const mintAddress = parsedInput.mintAddress
+      const amount = parsedInput.amount;
 
-      const tx = await this.solanaKit.lendAssets(amount);
+      const tx = await this.solanaKit.lendAssets(mintAddress, amount);
 
       return JSON.stringify({
         status: "success",
         message: "Asset lent successfully",
+        transaction: tx,
+        amount,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
+export class SolanaWithdrawAssetTool extends Tool {
+  name = "solana_withdraw_asset";
+  description = `Withdraw token USDC using Lulo. (support USDC/PYUSD/USDS/USDT/SOL/jitoSOL/bSOL/mSOL/BONK/JUP)
+
+  Inputs (input is a json string):
+  mintAddress: string, eg "So11111111111111111111111111111111111111112" (required)
+  amount: number, eg 1, 0.01 (required)`;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  async _call(input: string): Promise<string> {
+    try {
+      const parsedInput = JSON.parse(input);
+      const mintAddress = parsedInput.mintAddress
+      const amount = parsedInput.amount;
+
+      const tx = await this.solanaKit.withdrawAssets(mintAddress, amount);
+
+      return JSON.stringify({
+        status: "success",
+        message: "Asset withdraw successfully",
         transaction: tx,
         amount,
       });
@@ -2140,6 +2179,7 @@ export function createSolanaTools(solanaKit: SolanaAgentKit) {
     new SolanaPumpfunTokenLaunchTool(solanaKit),
     new SolanaCreateImageTool(solanaKit),
     new SolanaLendAssetTool(solanaKit),
+    new SolanaWithdrawAssetTool(solanaKit),
     new SolanaTPSCalculatorTool(solanaKit),
     new SolanaStakeTool(solanaKit),
     new SolanaRestakeTool(solanaKit),

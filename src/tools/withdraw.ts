@@ -2,20 +2,20 @@ import { VersionedTransaction } from "@solana/web3.js";
 import { SolanaAgentKit } from "../index";
 
 /**
- * Lend tokens for yields using Lulo
+ * Withdraw tokens for yields using Lulo
  * @param agent SolanaAgentKit instance
  * @param mintAddress SPL Mint address
- * @param amount Amount to lend
+ * @param amount Amount to withdraw
  * @returns Transaction signature
  */
-export async function lendAsset(
+export async function withdrawAsset(
   agent: SolanaAgentKit,
   mintAddress: string,
   amount: number,
 ): Promise<string> {
   try {
     const response = await fetch(
-      `https://api.flexlend.fi/generate/account/deposit?priorityFee=50000`,
+      `https://api.flexlend.fi/generate/account/withdraw?priorityFee=50000`,
       {
         method: "POST",
         headers: {
@@ -26,10 +26,11 @@ export async function lendAsset(
         body: JSON.stringify({
           owner: agent.wallet.publicKey.toBase58(),
           mintAddress: mintAddress,
-          depositAmount: amount.toString(),
+          depositAmount: amount,
         }),
       },
     );
+
     const { data: { transactionMeta } } = await response.json()
 
     // Deserialize the transaction

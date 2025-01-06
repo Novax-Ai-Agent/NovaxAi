@@ -9,6 +9,7 @@ import {
   SolanaAgentKit,
 } from "../index";
 import { create_image, FEE_TIERS, generateOrdersfromPattern } from "../tools";
+import { normalizeScaled } from "../utils/format";
 
 export class SolanaBalanceTool extends Tool {
   name = "solana_balance";
@@ -371,7 +372,7 @@ export class SolanaPerpOpenTradeTool extends Tool {
 
 export class SolanaTradeTool extends Tool {
   name = "solana_trade";
-  description = `This tool can be used to swap tokens to another token ( It uses Jupiter Exchange ).
+  description = `This tool can be used to swap tokens to another token ( It uses DFlow ).
 
   Inputs ( input is a JSON string ):
   outputMint: string, eg "So11111111111111111111111111111111111111112" or "SENDdRQtYMWaQrBroBrJ2Q53fgVuq95CV9UPGEvpCxa" (required)
@@ -387,7 +388,7 @@ export class SolanaTradeTool extends Tool {
     try {
       const parsedInput = JSON.parse(input);
 
-      const tx = await this.solanaKit.trade(
+      const result = await this.solanaKit.trade(
         new PublicKey(parsedInput.outputMint),
         parsedInput.inputAmount,
         parsedInput.inputMint
@@ -399,10 +400,11 @@ export class SolanaTradeTool extends Tool {
       return JSON.stringify({
         status: "success",
         message: "Trade executed successfully",
-        transaction: tx,
-        inputAmount: parsedInput.inputAmount,
+        inputAmount: normalizeScaled(result.qtyIn, result.inputDecimals),
         inputToken: parsedInput.inputMint || "SOL",
+        outputAmount: normalizeScaled(result.qtyOut, result.outputDecimals),
         outputToken: parsedInput.outputMint,
+        orderAddress: result.orderAddress,
       });
     } catch (error: any) {
       return JSON.stringify({

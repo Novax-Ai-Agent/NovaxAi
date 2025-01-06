@@ -32,6 +32,7 @@ import {
   openPerpTradeShort,
   openPerpTradeLong,
   transfer,
+  TradeResult,
   getTokenDataByAddress,
   getTokenDataByTicker,
   stakeWithJup,
@@ -113,6 +114,7 @@ export class SolanaAgentKit {
   ) {
     this.connection = new Connection(
       rpc_url || "https://api.mainnet-beta.solana.com",
+      "confirmed",
     );
     this.wallet = Keypair.fromSecretKey(bs58.decode(private_key));
     this.wallet_address = this.wallet.publicKey;
@@ -190,7 +192,7 @@ export class SolanaAgentKit {
     inputAmount: number,
     inputMint?: PublicKey,
     slippageBps: number = DEFAULT_OPTIONS.SLIPPAGE_BPS,
-  ): Promise<string> {
+  ): Promise<TradeResult> {
     return trade(this, outputMint, inputAmount, inputMint, slippageBps);
   }
 

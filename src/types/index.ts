@@ -238,3 +238,8 @@ export interface FlashCloseTradeParams {
   token: string;
   side: "long" | "short";
 }
+
+export interface PriorityFeeTransaction {
+  transactionId: string;
+  fee: number;
+}

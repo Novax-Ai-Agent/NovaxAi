@@ -65,6 +65,7 @@ import {
   flashCloseTrade,
   parseTransaction,
   getAssetsByOwner,
+  sendTransactionWithPriorityFee,
 } from "../tools";
 import {
   CollectionDeployment,
@@ -77,6 +78,7 @@ import {
   OrderParams,
   FlashTradeParams,
   FlashCloseTradeParams,
+  PriorityFeeTransaction,
 } from "../types";
 import {
   createCollection,
@@ -610,5 +612,12 @@ export class SolanaAgentKit {
       isMainnet,
     );
     return `Transaction: ${tx}`;
+  }
+  async sendTranctionWithPriority(
+    priorityLevel: string,
+    amount: number,
+    to: PublicKey,
+  ): Promise<PriorityFeeTransaction> {
+    return sendTransactionWithPriorityFee(this, priorityLevel, amount, to);
   }
 }

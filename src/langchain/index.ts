@@ -2305,9 +2305,8 @@ export class SolanaGetAllAssetsByOwner extends Tool {
 
   protected async _call(input: string): Promise<string> {
     try {
-      const parsedInput = input.trim();
-      const ownerPubkey = new PublicKey(parsedInput);
-      const limit = parseInt(input);
+      const { owner, limit } = JSON.parse(input);
+      const ownerPubkey = new PublicKey(owner);
 
       const assets = await this.solanaKit.getAllAssetsbyOwner(
         ownerPubkey,

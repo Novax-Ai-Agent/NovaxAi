@@ -63,6 +63,8 @@ import {
   fetchPythPriceFeedID,
   flashOpenTrade,
   flashCloseTrade,
+  parseTransaction,
+  getAssetsByOwner,
 } from "../tools";
 import {
   CollectionDeployment,
@@ -579,6 +581,12 @@ export class SolanaAgentKit {
    */
   async flashCloseTrade(params: FlashCloseTradeParams): Promise<string> {
     return flashCloseTrade(this, params);
+  }
+  async heliusParseTransactions(transactionId: string): Promise<any> {
+    return parseTransaction(this, transactionId);
+  }
+  async getAllAssetsbyOwner(owner: PublicKey, limit: number): Promise<any> {
+    return getAssetsByOwner(this, owner, limit);
   }
 
   async create3LandCollection(

@@ -2260,6 +2260,74 @@ export class SolanaFetchTokenDetailedReportTool extends Tool {
   }
 }
 
+export class SolanaParseTransactionHeliusTool extends Tool {
+  name = "solana_parse_transaction_helius";
+  description = `Parse a Solana transaction using Helius API.
+
+  Inputs:
+  - transactionId: string, the ID of the transaction to parse, e.g., "5h3k...9d2k" (required).`;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<any> {
+    try {
+      const transactionId = input.trim();
+      const parsedTransaction =
+        await this.solanaKit.heliusParseTransactions(transactionId);
+      return JSON.stringify({
+        status: "success",
+        message: "transaction parsed successfully",
+        transaction: parsedTransaction,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "NOt able to Parse transaction",
+      });
+    }
+  }
+}
+
+export class SolanaGetAllAssetsByOwner extends Tool {
+  name = "solana_get_all_assets_by_owner";
+  description = `Get all assets owned by a specific wallet address.
+
+  Inputs:
+  - owner: string, the wallet address of the owner, e.g., "4Be9CvxqHW6BYiRAxW9Q3xu1ycTMWaL5z8NX4HR3ha7t" (required)
+  - limit: number, the maximum number of assets to retrieve (optional)`;
+
+  constructor(private solanaKit: SolanaAgentKit) {
+    super();
+  }
+
+  protected async _call(input: string): Promise<string> {
+    try {
+      const parsedInput = input.trim();
+      const ownerPubkey = new PublicKey(parsedInput);
+      const limit = parseInt(input);
+
+      const assets = await this.solanaKit.getAllAssetsbyOwner(
+        ownerPubkey,
+        limit,
+      );
+      return JSON.stringify({
+        status: "success",
+        message: "Assets retrieved successfully",
+        assets: assets,
+      });
+    } catch (error: any) {
+      return JSON.stringify({
+        status: "error",
+        message: error.message,
+        code: error.code || "UNKNOWN_ERROR",
+      });
+    }
+  }
+}
+
 export class Solana3LandCreateSingle extends Tool {
   name = "3land_minting_tool";
   description = `Creates an NFT and lists it on 3.land's website
@@ -2494,6 +2562,8 @@ export function createSolanaTools(solanaKit: SolanaAgentKit) {
     new SolanaPerpCloseTradeTool(solanaKit),
     new SolanaFlashOpenTrade(solanaKit),
     new SolanaFlashCloseTrade(solanaKit),
+    new SolanaParseTransactionHeliusTool(solanaKit),
+    new SolanaGetAllAssetsByOwner(solanaKit),
     new Solana3LandCreateSingle(solanaKit),
   ];
 }

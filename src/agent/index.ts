@@ -156,7 +156,19 @@ export class SolanaAgentKit {
     return deploy_collection(this, options);
   }
 
-  async getBalance(token_address?: PublicKey): Promise<number> {
+  async getBalance(token_address?: PublicKey): Promise<
+    | number
+    | {
+        sol: number;
+        tokens: Array<{
+          tokenAddress: string;
+          name: string;
+          symbol: string;
+          balance: number;
+          decimals: number;
+        }>;
+      }
+  > {
     return get_balance(this, token_address);
   }
 

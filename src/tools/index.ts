@@ -48,5 +48,8 @@ export * from "./trade";
 export * from "./transfer";
 export * from "./flash_open_trade";
 export * from "./flash_close_trade";
+export * from "./helius_transaction_parsing";
+export * from "./get_assets_by_owner";
 
 export * from "./create_3land_collectible";
+export * from "./send_transaction_with_priority";

@@ -2,11 +2,9 @@
 
 # Solana Agent Kit
 
-![Solana Agent Kit Cover 1 (3)](https://www.bing.com/images/blob?bcid=Tm1jkkwa2.UH00biF7Z0o9MTSY.g.....2k)
+![Solana Agent Kit Cover 1 (3)](https://cdn.discordapp.com/attachments/1158593497302048768/1326541855759794207/397842549-cfa380f6-79d9-474d-9852-3e1976c6de70-fotor-2025010851248.png?ex=677fcde0&is=677e7c60&hm=a248b7ba4f48af6c2a41642a6e6e7267676eeb8fa5284974ab9702748f51e820&))
 
-![NPM Downloads](https://img.shields.io/npm/dm/solana-agent-kit?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/sendaifun/solana-agent-kit?style=for-the-badge)
-![GitHub License](https://img.shields.io/github/license/sendaifun/solana-agent-kit?style=for-the-badge)
+
 
 </div>
 
@@ -338,16 +336,6 @@ The toolkit relies on several key Solana and Metaplex libraries:
 - @lightprotocol/compressed-token
 - @lightprotocol/stateless.js
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-Refer to [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to this project.
-
-## Contributors
-
-<a href="https://github.com/sendaifun/solana-agent-kit/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=sendaifun/solana-agent-kit" />
-</a>
 
 ## Star History
 
@@ -357,11 +345,7 @@ Refer to [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to co
 
 Apache-2 License
 
-## Funding 
 
-If you wanna give back any tokens or donations to the OSS community -- The Public Solana Agent Kit Treasury Address:
-
-Solana Network : EKHTbXpsm6YDgJzMkFxNU1LNXeWcUW7Ezf8mjUNQQ4Pa
 
 ## Security
 

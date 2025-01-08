@@ -2609,5 +2609,6 @@ export function createSolanaTools(solanaKit: SolanaAgentKit) {
     new SolanaParseTransactionHeliusTool(solanaKit),
     new SolanaGetAllAssetsByOwner(solanaKit),
     new Solana3LandCreateSingle(solanaKit),
+    new SolanaSendTransactionWithPriorityFee(solanaKit),
   ];
 }

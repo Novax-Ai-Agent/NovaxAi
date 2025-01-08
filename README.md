@@ -1,8 +1,8 @@
 <div align="center">
 
-# Solana Agent Kit
+# NOVAX Solana Agent Deployer
 
-![Solana Agent Kit Cover 1 (3)](https://cdn.discordapp.com/attachments/1158593497302048768/1326541855759794207/397842549-cfa380f6-79d9-474d-9852-3e1976c6de70-fotor-2025010851248.png?ex=677fcde0&is=677e7c60&hm=a248b7ba4f48af6c2a41642a6e6e7267676eeb8fa5284974ab9702748f51e820&))
+
 
 
 
@@ -90,7 +90,7 @@ Anyone - whether an SF-based AI researcher or a crypto-native builder - can brin
   - Automated decision-making capabilities
 
 ## 📃 Documentation
-You can view the full documentation of the kit at [docs.solanaagentkit.xyz](https://docs.solanaagentkit.xyz)
+You can view the full documentation of the kit at [docs.NovaxAiAgent.xyz](https://docs.solanaagentkit.xyz)
 
 ## 📦 Installation
 
